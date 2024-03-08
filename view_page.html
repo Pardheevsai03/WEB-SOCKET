@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+    <style>
+        #hi {
+            border: 2px solid black; 
+            width: 50%; 
+            margin: auto; 
+            position: absolute; 
+            top: 50%;
+            left: 50%; 
+            transform: translate(-50%, -50%); 
+            text-align: center; 
+        }
+    </style>
+<head>
+    <meta charset="UTF-8">
+    <title>websockets</title>
+</head>
+<body>
+   <div id ="hi"> 
+    <div id="chatMessages"></div>
+</div>
+    <script src="https://cdn.socket.io/4.3.2/socket.io.min.js"></script>
+    <script>
+      const socket = io("http://localhost:5500");
+
+      socket.on('message', (message) => {
+        const chatMessages = document.getElementById('chatMessages');
+       chatMessages.innerHTML += `<p>${message}</p>`;
+    });
+    </script>
+</body>
+</html>
