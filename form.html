@@ -2,9 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>websockets</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.3.1/socket.io.js"></script>
 </head>
 <body>
     <form id="chatForm">
@@ -12,25 +10,24 @@
         <button type="submit">Send</button>
     </form>
     <div id="chatMessages"></div>
-+
-    <script src="node.js" type="js"></script>
+
+    <script src="https://cdn.socket.io/4.3.2/socket.io.min.js"></script>
     <script>
-        const socket = io();
+      const socket = io();
 
-        document.getElementById('chatForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            const messageInput = document.getElementById('message');
-            const message = messageInput.value;
-            socket.emit('chatMessage', message);
-            messageInput.value = '';
-        });
+      socket.on('message', (message) => {
+        const chatMessages = document.getElementById('chatMessages');
+       chatMessages.innerHTML += `<p>${message}</p>`;
+    });
 
-        socket.on('chatMessage', function(message) {
-            const chatMessages = document.getElementById('chatMessages');
-            const messageElement = document.createElement('div');
-            messageElement.innerText = message;
-            chatMessages.appendChild(messageElement);
-        });
+      document.getElementById("chatForm").addEventListener('submit', function(event) {
+          event.preventDefault();
+          const messageInput = document.getElementById('message');
+          const message = messageInput.value;
+          socket.emit('chatMessage', message);
+          console.log(message);
+          messageInput.value = '';
+      });
     </script>
 </body>
 </html>
