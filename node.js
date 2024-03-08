@@ -28,7 +28,7 @@ app.use((req, res, next) => {
   next();
 });
 
-server.listen(3000, () => console.log('Server started at port 3000'));
+server.listen(5500, () => console.log('Server started at port 5500'));
 
 app.use(express.static("./form.html"));
 
