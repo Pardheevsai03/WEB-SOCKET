@@ -1,10 +1,24 @@
 const express = require("express");
 const app = express();
+const cors = require('cors');
 const http = require("http");
 const { Server } = require("socket.io");
-const server = http.createServer(app);
-const io = new Server(server);
 const mysql = require("mysql");
+
+
+const corsOptions = {
+  origin: "http://127.0.0.1:5500", 
+  methods: ['POST', 'GET', 'PUT'],
+  allowedHeaders: ['Content-Type'],
+  credentials: true
+};
+
+
+app.use(cors(corsOptions));
+
+
+app.options('*', cors(corsOptions));
+
 
 const db = mysql.createConnection({
   host: "127.0.0.1",
@@ -12,6 +26,7 @@ const db = mysql.createConnection({
   password: "Hello1234",
   database: "test1"
 });
+
 
 db.connect(err => {
   if (err) {
@@ -21,20 +36,23 @@ db.connect(err => {
   console.log("Connected to MySQL database!");
 });
 
-app.use((req, res, next) => {
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Methods", "GET, POST");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
-  next();
+
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: corsOptions
 });
+
 
 server.listen(5500, () => console.log('Server started at port 5500'));
 
-app.use(express.static("./form.html"));
+
+app.use(express.static("public"));
+
 
 app.get('/', (req, res) => {
-  return res.sendFile(__dirname + "./form.html");
+  return res.sendFile(__dirname + "/public/form.html");
 });
+
 
 io.on('connection', (socket) => {
   console.log("ID of", socket.id, "is connected");
